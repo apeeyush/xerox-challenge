@@ -33,11 +33,34 @@ def filter_by_label(df, label_val):
 
 # Filter data to keep only latest timestamp where label=1
 def filter_dataset(df):
-    label_1 = filter_by_label(df, 1)
-    label_0 = filter_by_label(df, 0)
-    final_df = label_1.groupby('ID').last().reset_index()
+    label_1 = filter_by_label(df, 1).groupby('ID').tail(2).reset_index()
+    label_0 = filter_by_label(df, 0).groupby('ID').tail(15).reset_index()
+    final_df = label_1
     final_df = final_df.append(label_0, ignore_index=True)
     return final_df
+
+def transform_gen(df):
+    var_list = [
+        'V1','V2','V3','V4','V5','V6',
+        'L1','L2','L3','L4','L5','L6','L7','L8','L9','L10',
+        'L11','L12','L13','L14','L15','L16','L17','L18','L19','L20',
+        'L21','L22','L23','L24','L25'
+    ]
+
+    # Add running max (maximum of past 10 entries considered)
+    for var in var_list:
+        col_name = 'max'+var
+        df[col_name] = df.groupby('ID')[var].apply(pd.rolling_max, 15, min_periods=1)
+    # Add running min (maximum of past 10 entries considered)
+    for var in var_list:
+        col_name = 'min'+var
+        df[col_name] = df.groupby('ID')[var].apply(pd.rolling_min, 15, min_periods=1)
+    # Add running mean (maximum of past 10 entries considered)
+    for var in var_list:
+        col_name = 'mean'+var
+        df[col_name] = df.groupby('ID')[var].apply(pd.rolling_mean, 15, min_periods=1)
+    return df
+
 
 def transform_train_data(df):
     # WIP : Add variables to df as needed
@@ -47,13 +70,14 @@ def transform_train_data(df):
     #     pid = row['ID']
     # df['maxV1'] = maxV1
     # df.groupby('ID')['V1'].apply(pd.rolling_mean, 2, min_periods=1)
-
+    df = transform_gen(df)
     # Filter dataset
     df = filter_dataset(df)
     return df
 
 def transform_val_data(df):
     # TODO : Add variables to df as needed
+    df = transform_gen(df)
     return df
 
 def drop_columns(df, columns):
@@ -61,7 +85,7 @@ def drop_columns(df, columns):
 
 def predict():
     # Train the model
-    rf = RandomForestClassifier()
+    rf = RandomForestClassifier(n_estimators=500, n_jobs=-1)
     rf.fit(X_train_data, y_train_data)
 
     # Predict using the model
@@ -88,14 +112,29 @@ if __name__ == '__main__':
 
     features = [
         'AGE',
+
         'L1','L2','L3','L4','L5','L6','L7','L8','L9','L10',
         'L11','L12','L13','L14','L15','L16','L17','L18','L19','L20',
         'L21','L22','L23','L24','L25',
+
         'V1','V2','V3','V4','V5','V6',
+
+        'maxL1','maxL2','maxL3','maxL4','maxL5','maxL6','maxL7','maxL8','maxL9','maxL10',
+        'maxL11','maxL12','maxL13','maxL14','maxL15','maxL16','maxL17','maxL18','maxL19','maxL20',
+        'maxL21','maxL22','maxL23','maxL24','maxL25',
+        'minL1','minL2','minL3','minL4','minL5','minL6','minL7','minL8','minL9','minL10',
+        'minL11','minL12','minL13','minL14','minL15','minL16','minL17','minL18','minL19','minL20',
+        'minL21','minL22','minL23','minL24','minL25',
+        'meanL1','meanL2','meanL3','meanL4','meanL5','meanL6','meanL7','meanL8','meanL9','meanL10',
+        'meanL11','meanL12','meanL13','meanL14','meanL15','meanL16','meanL17','meanL18','meanL19','meanL20',
+        'meanL21','meanL22','meanL23','meanL24','meanL25',
+
+        'maxV1','maxV2','maxV3','maxV4','maxV5','maxV6',
+        'minV1','minV2','minV3','minV4','minV5','minV6',
+        'meanV1','meanV2','meanV3','meanV4','meanV5','meanV6',
+
         'ICU'
     ]
-    #    'maxV1','maxV2','maxV3','maxV4','maxV5','maxV6',
-    #    'minV1','minV2','minV3','minV4','minV5','minV6',
 
     # Prepare train data for use by model
     # TODO : Handle any NaN present - Temporarily fill 0
