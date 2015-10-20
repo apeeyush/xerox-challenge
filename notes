@@ -1,0 +1,61 @@
+# Submission Log
+
+Parameters - unknown
+3501 matches of 1
+Median Prediction time (hrs) 50.9847222222
+Average Prediction time (hrs) 122.470868056
+Sensitivity : 0.682926829268
+Specificity : 0.90770609319 
+Specificity is less than 0.99 0.90770609319
+
+
+tail = 1, infinite
+n_estimators = 1000
+min, max, mean = rolling 20
+normal variables + min, max, mean
+count_1 = 11
+Median Prediction time (hrs) 0.0
+Average Prediction time (hrs) 2.04711111111
+Sensitivity : 0.0609756097561
+Specificity : 1.0
+Submission does not meet prediction time lower limit i.e. 5hrs 0.0
+
+
+tail = 1, 30
+min, max, mean = rolling 20
+n_estimators = 1000
+count_1 = 2105
+Median Prediction time (hrs) 30.3905555556 
+Average Prediction time (hrs) 92.0441722222 
+Sensitivity : 0.609756097561 
+Specificity : 0.950716845878 
+Specificity is less than 0.99 0.950716845878
+
+
+tail = 1,50
+min, max, mean = rolling 25
+n_estimators = 1000
+count_1 = 1411
+Median Prediction time (hrs) 25.1725
+Average Prediction time (hrs) 76.6752469136
+Sensitivity : 0.439024390244 
+Specificity : 0.977598566308 
+Specificity is less than 0.99 0.977598566308
+
+
+tail = 1,100
+min, max, mean = rolling 25
+estimators = 1000
+count_1 = 49
+class weights  = 1, 20
+Median Prediction time (hrs) 0.536944444444
+Average Prediction time (hrs) 2.91097222222 
+Sensitivity : 0.146341463415 
+Specificity : 1.0 Submission does not meet prediction time lower limit i.e. 5hrs 0.536944444444
+
+
+rolling = 25
+tail = 1,70
+estimators = 1000
+class weights  = 1, 50
+count_1 = 68
