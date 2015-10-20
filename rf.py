@@ -2,16 +2,16 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import csv as csv
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
 from math import *
 from datetime import datetime
 
 # Prepare training dataset by merging csv files
 def gen_train_data():
-    df_id_age = pd.read_csv('./train/id_age_train.csv')
-    df_id_label = pd.read_csv('train/id_label_train.csv')
-    df_id_time_labs = pd.read_csv('train/id_time_labs_train.csv')
-    df_id_time_vitals = pd.read_csv('train/id_time_vitals_train.csv')
+    df_id_age = pd.read_csv('id_age_train.csv')
+    df_id_label = pd.read_csv('id_label_train.csv')
+    df_id_time_labs = pd.read_csv('id_time_labs_train.csv')
+    df_id_time_vitals = pd.read_csv('id_time_vitals_train.csv')
     df_id_age_label_merge = pd.merge(df_id_age, df_id_label, how='inner', on='ID')
     df_id_labs_vitals_merge = pd.merge(df_id_time_labs, df_id_time_vitals, how='inner', on=['ID','TIME'])
     df = pd.merge(df_id_age_label_merge, df_id_labs_vitals_merge, how='inner',on='ID')
@@ -61,7 +61,7 @@ def drop_columns(df, columns):
 
 def predict():
     # Train the model
-    rf = RandomForestRegressor()
+    rf = RandomForestClassifier()
     rf.fit(X_train_data, y_train_data)
 
     # Predict using the model
@@ -92,10 +92,10 @@ if __name__ == '__main__':
         'L11','L12','L13','L14','L15','L16','L17','L18','L19','L20',
         'L21','L22','L23','L24','L25',
         'V1','V2','V3','V4','V5','V6',
-        'maxV1','maxV2','maxV3','maxV4','maxV5','maxV6',
-        'minV1','minV2','minV3','minV4','minV5','minV6',
         'ICU'
     ]
+    #    'maxV1','maxV2','maxV3','maxV4','maxV5','maxV6',
+    #    'minV1','minV2','minV3','minV4','minV5','minV6',
 
     # Prepare train data for use by model
     # TODO : Handle any NaN present - Temporarily fill 0
