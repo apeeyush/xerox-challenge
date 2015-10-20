@@ -59,3 +59,18 @@ tail = 1,70
 estimators = 1000
 class weights  = 1, 50
 count_1 = 68
+
+
+
+
+
+rolling = 25
+tail = 1,70
+estimators = 1000
+count_1 = 866
+
+Median Prediction time (hrs) 9.95 
+Average Prediction time (hrs) 67.9351289683 
+Sensitivity : 0.341463414634 
+Specificity : 0.991935483871
+score = 0.29
