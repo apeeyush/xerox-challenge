@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import csv as csv
 from sklearn.ensemble import RandomForestClassifier
 from math import *
@@ -33,8 +33,8 @@ def filter_by_label(df, label_val):
 
 # Filter data to keep only latest timestamp where label=1
 def filter_dataset(df):
-    label_1 = filter_by_label(df, 1).groupby('ID').tail(2).reset_index()
-    label_0 = filter_by_label(df, 0).groupby('ID').tail(15).reset_index()
+    label_1 = filter_by_label(df, 1).groupby('ID').tail(1).reset_index()
+    label_0 = filter_by_label(df, 0).groupby('ID').tail(65).reset_index()
     final_df = label_1
     final_df = final_df.append(label_0, ignore_index=True)
     return final_df
@@ -50,15 +50,15 @@ def transform_gen(df):
     # Add running max (maximum of past 10 entries considered)
     for var in var_list:
         col_name = 'max'+var
-        df[col_name] = df.groupby('ID')[var].apply(pd.rolling_max, 15, min_periods=1)
+        df[col_name] = df.groupby('ID')[var].apply(pd.rolling_max, 25, min_periods=1)
     # Add running min (maximum of past 10 entries considered)
     for var in var_list:
         col_name = 'min'+var
-        df[col_name] = df.groupby('ID')[var].apply(pd.rolling_min, 15, min_periods=1)
+        df[col_name] = df.groupby('ID')[var].apply(pd.rolling_min, 25, min_periods=1)
     # Add running mean (maximum of past 10 entries considered)
     for var in var_list:
         col_name = 'mean'+var
-        df[col_name] = df.groupby('ID')[var].apply(pd.rolling_mean, 15, min_periods=1)
+        df[col_name] = df.groupby('ID')[var].apply(pd.rolling_mean, 25, min_periods=1)
     return df
 
 
@@ -85,7 +85,7 @@ def drop_columns(df, columns):
 
 def predict():
     # Train the model
-    rf = RandomForestClassifier(n_estimators=500, n_jobs=-1)
+    rf = RandomForestClassifier(n_estimators=1000, n_jobs=-1)
     rf.fit(X_train_data, y_train_data)
 
     # Predict using the model
