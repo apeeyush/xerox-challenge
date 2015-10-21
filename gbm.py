@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import csv as csv
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 from math import *
 from datetime import datetime
 
@@ -47,15 +47,15 @@ def transform_gen(df):
         'L21','L22','L23','L24','L25'
     ]
 
-    # Add running max (maximum of past 10 entries considered)
+    # Add running max (maximum of past 25 entries considered)
     for var in var_list:
         col_name = 'max'+var
         df[col_name] = df.groupby('ID')[var].apply(pd.rolling_max, 25, min_periods=1)
-    # Add running min (maximum of past 10 entries considered)
+    # Add running min (maximum of past 25 entries considered)
     for var in var_list:
         col_name = 'min'+var
         df[col_name] = df.groupby('ID')[var].apply(pd.rolling_min, 25, min_periods=1)
-    # Add running mean (maximum of past 10 entries considered)
+    # Add running mean (maximum of past 25 entries considered)
     for var in var_list:
         col_name = 'mean'+var
         df[col_name] = df.groupby('ID')[var].apply(pd.rolling_mean, 25, min_periods=1)
@@ -89,19 +89,19 @@ def drop_columns(df, columns):
 
 def predict():
     # Train the model
-    rf = RandomForestClassifier(n_estimators=1000, n_jobs=-1)
+    gbm = GradientBoostingClassifier(n_estimators=150, max_depth=5)
     # class_weight={0:1, 1:2}
-    rf.fit(X_train_data, y_train_data)
+    gbm.fit(X_train_data, y_train_data)
 
     # Predict using the model
-    output_rf = rf.predict(test_data)
+    output_gbm = gbm.predict(test_data)
 
     # TODO : Processing the output -> ensuring 0/1, removing negatives etc.
 
     # Prepare submission
-    predictions_file = open("output_rf.csv", "wb")
+    predictions_file = open("output.csv", "wb")
     open_file_object = csv.writer(predictions_file)
-    open_file_object.writerows(zip(ids, times, output_rf))
+    open_file_object.writerows(zip(ids, times, output_gbm))
     predictions_file.close()
 
     print 'Done.'
