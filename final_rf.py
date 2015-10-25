@@ -20,9 +20,17 @@ def gen_train_data():
 
 # Prepare validation dataset by merging csv files
 def gen_val_data():
-    df_id_age = pd.read_csv('./validation/id_age_val.csv')
-    df_id_time_labs = pd.read_csv('validation/id_time_labs_val.csv')
-    df_id_time_vitals = pd.read_csv('validation/id_time_vitals_val.csv')
+    if len(sys.argv) > 1:
+        id_age_file = sys.argv[1]
+        id_time_labs_file = sys.argv[2]
+        id_time_vitals_file = sys.argv[3]
+    else:
+        id_age_file = 'validation/id_age_val.csv'
+        id_time_labs_file = 'validation/id_time_labs_val.csv'
+        id_time_vitals_file = 'validation/id_time_vitals_val.csv'
+    df_id_age = pd.read_csv(id_age_file)
+    df_id_time_labs = pd.read_csv(id_time_labs_file)
+    df_id_time_vitals = pd.read_csv(id_time_vitals_file)
     df_id_labs_vitals_merge = pd.merge(df_id_time_labs, df_id_time_vitals, how='inner', on=['ID','TIME'])
     df = pd.merge(df_id_age, df_id_labs_vitals_merge, how='inner',on='ID')
     df = df.sort(['ID', 'TIME'])
@@ -202,7 +210,7 @@ def result_gen(i,j):
     predict(X_train_data,y_train_data,test_data,ids,times,i,j)
 
 
-result_gen(190,15)
+result_gen(220,10)
 
 # t1 = [180,360,360,500,500]
 # t2 = [15,25,30,35,45]

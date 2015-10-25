@@ -4,6 +4,7 @@ import csv as csv
 from sklearn.ensemble import RandomForestClassifier
 from math import *
 from datetime import datetime
+import sys
 
 # Prepare training dataset by merging csv files
 def gen_train_data():
@@ -19,9 +20,17 @@ def gen_train_data():
 
 # Prepare validation dataset by merging csv files
 def gen_val_data():
-    df_id_age = pd.read_csv('./validation/id_age_val.csv')
-    df_id_time_labs = pd.read_csv('validation/id_time_labs_val.csv')
-    df_id_time_vitals = pd.read_csv('validation/id_time_vitals_val.csv')
+    if len(sys.argv) > 1:
+        id_age_file = sys.argv[1]
+        id_time_labs_file = sys.argv[2]
+        id_time_vitals_file = sys.argv[3]
+    else:
+        id_age_file = 'validation/id_age_val.csv'
+        id_time_labs_file = 'validation/id_time_labs_val.csv'
+        id_time_vitals_file = 'validation/id_time_vitals_val.csv'
+    df_id_age = pd.read_csv(id_age_file)
+    df_id_time_labs = pd.read_csv(id_time_labs_file)
+    df_id_time_vitals = pd.read_csv(id_time_vitals_file)
     df_id_labs_vitals_merge = pd.merge(df_id_time_labs, df_id_time_vitals, how='inner', on=['ID','TIME'])
     df = pd.merge(df_id_age, df_id_labs_vitals_merge, how='inner',on='ID')
     df = df.sort(['ID', 'TIME'])
