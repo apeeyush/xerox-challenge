@@ -84,14 +84,7 @@ def transform_gen(df):
         col_name = 'mean'+var
         df[col_name] = df.groupby('ID')[var].apply(pd.rolling_mean, 50, min_periods=1)
 
-    # Add running max (maximum of past 10 entries considered)
-    for var in var_list:
-        col_name = 'localMax'+var
-        df[col_name] = df.groupby('ID')[var].apply(pd.rolling_max, 5, min_periods=1)
-    # Add running min (maximum of past 10 entries considered)
-    for var in var_list:
-        col_name = 'localMin'+var
-        df[col_name] = df.groupby('ID')[var].apply(pd.rolling_min, 5, min_periods=1)
+    var_list = ['V1','V2','V3','V4','V5','V6']
     # Add running mean (maximum of past 10 entries considered)
     for var in var_list:
         col_name = 'localMean'+var
@@ -129,11 +122,12 @@ def predict(X_train_data,y_train_data,test_data,ids,times,i,j):
     rf.fit(X_train_data, y_train_data)
     output_rf = rf.predict(test_data)
     # Train gbm and predict using the model
-    gbm = GradientBoostingClassifier(n_estimators=150, max_depth=5)
-    gbm.fit(X_train_data, y_train_data)
-    output_gbm = gbm.predict(test_data)
+    # gbm = GradientBoostingClassifier(n_estimators=200, max_depth=6)
+    # gbm.fit(X_train_data, y_train_data)
+    # output_gbm = gbm.predict(test_data)
 
-    final_output = [ x or y for x, y in zip(output_rf, output_gbm)]
+    # final_output = [ x or y for x, y in zip(output_rf, output_gbm)]
+    final_output = output_rf
 
     # Prepare submission
     predictions_file = open("output_ensemble"+".csv", "wb")
@@ -154,12 +148,6 @@ def result_gen(i,j):
     features = [
         'AGE',
 
-        'L1','L2','L3','L4','L5','L6','L7','L8','L9','L10',
-        'L11','L12','L13','L14','L15','L16','L17','L18','L19','L20',
-        'L21','L22','L23','L24','L25',
-
-        'V1','V2','V3','V4','V5','V6',
-
         'maxL1','maxL2','maxL3','maxL4','maxL5','maxL6','maxL7','maxL8','maxL9','maxL10',
         'maxL11','maxL12','maxL13','maxL14','maxL15','maxL16','maxL17','maxL18','maxL19','maxL20',
         'maxL21','maxL22','maxL23','maxL24','maxL25',
@@ -170,22 +158,10 @@ def result_gen(i,j):
         'meanL11','meanL12','meanL13','meanL14','meanL15','meanL16','meanL17','meanL18','meanL19','meanL20',
         'meanL21','meanL22','meanL23','meanL24','meanL25',
 
-        'localMaxL1','localMaxL2','localMaxL3','localMaxL4','localMaxL5','localMaxL6','localMaxL7','localMaxL8','localMaxL9','localMaxL10',
-        'localMaxL11','localMaxL12','localMaxL13','localMaxL14','localMaxL15','localMaxL16','localMaxL17','localMaxL18','localMaxL19','localMaxL20',
-        'localMaxL21','localMaxL22','localMaxL23','localMaxL24','localMaxL25',
-        'localMinL1','localMinL2','localMinL3','localMinL4','localMinL5','localMinL6','localMinL7','localMinL8','localMinL9','localMinL10',
-        'localMinL11','localMinL12','localMinL13','localMinL14','localMinL15','localMinL16','localMinL17','localMinL18','localMinL19','localMinL20',
-        'localMinL21','localMinL22','localMinL23','localMinL24','localMinL25',
-        'localMeanL1','localMeanL2','localMeanL3','localMeanL4','localMeanL5','localMeanL6','localMeanL7','localMeanL8','localMeanL9','localMeanL10',
-        'localMeanL11','localMeanL12','localMeanL13','localMeanL14','localMeanL15','localMeanL16','localMeanL17','localMeanL18','localMeanL19','localMeanL20',
-        'localMeanL21','localMeanL22','localMeanL23','localMeanL24','localMeanL25',
-
         'maxV1','maxV2','maxV3','maxV4','maxV5','maxV6',
         'minV1','minV2','minV3','minV4','minV5','minV6',
         'meanV1','meanV2','meanV3','meanV4','meanV5','meanV6',
 
-        'localMaxV1','localMaxV2','localMaxV3','localMaxV4','localMaxV5','localMaxV6',
-        'localMinV1','localMinV2','localMinV3','localMinV4','localMinV5','localMinV6',
         'localMeanV1','localMeanV2','localMeanV3','localMeanV4','localMeanV5','localMeanV6',
 
         'ICU'
@@ -213,4 +189,4 @@ def result_gen(i,j):
     predict(X_train_data,y_train_data,test_data,ids,times,i,j)
 
 
-result_gen(220,10)
+result_gen(270,10)
