@@ -1,12 +1,12 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 import csv as csv
 from sklearn.ensemble import RandomForestClassifier
 from math import *
 from datetime import datetime
 import pickle
 import sys
+
 # Prepare training dataset by merging csv files
 def gen_train_data():
     df_id_age = pd.read_csv('id_age_train.csv')
@@ -76,8 +76,14 @@ def transform_gen(df):
     for var in var_list:
         col_name = 'mean'+var
         df[col_name] = df.groupby('ID')[var].apply(pd.rolling_mean, 50, min_periods=1)
-    return df
 
+    var_list = ['V1','V2','V3','V4','V5','V6']
+    # Add running mean (maximum of past 10 entries considered)
+    for var in var_list:
+        col_name = 'localMean'+var
+        df[col_name] = df.groupby('ID')[var].apply(pd.rolling_mean, 2, min_periods=1)
+
+    return df
 
 def transform_train_data(df,i,j):
     # WIP : Add variables to df as needed
@@ -132,10 +138,6 @@ def result_gen(i,j):
     features = [
         'AGE',
 
-        'L1','L2','L3','L4','L5','L6','L7','L8','L9','L10',
-        'L11','L12','L13','L14','L15','L16','L17','L18','L19','L20',
-        'L21','L22','L23','L24','L25',
-
         'V1','V2','V3','V4','V5','V6',
 
         'maxL1','maxL2','maxL3','maxL4','maxL5','maxL6','maxL7','maxL8','maxL9','maxL10',
@@ -151,6 +153,8 @@ def result_gen(i,j):
         'maxV1','maxV2','maxV3','maxV4','maxV5','maxV6',
         'minV1','minV2','minV3','minV4','minV5','minV6',
         'meanV1','meanV2','meanV3','meanV4','meanV5','meanV6',
+
+        'localMeanV1','localMeanV2','localMeanV3','localMeanV4','localMeanV5','localMeanV6',
 
         'ICU'
     ]
