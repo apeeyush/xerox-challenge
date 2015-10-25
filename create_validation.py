@@ -76,7 +76,7 @@ def create_output_from_prob():
 	pass
 
 # Evaluate submission
-sc,sp,sens,time = compute_score('output_rf.csv')
+sc,sp,sens,time = compute_score(sys.argv[1])
 time  = time if time < 72.0 else time
 sc = sc + 0.05*(72-time)/72
 print('Score = %.4f, Specificity = %.4f, Sensitivity = %.4f, Prediction Time = %.4f\n'%(sc,sp,sens,time))
