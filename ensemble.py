@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import csv as csv
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 from math import *
 from datetime import datetime
 import pickle
@@ -132,7 +133,7 @@ def predict(X_train_data,y_train_data,test_data,ids,times,i,j):
     gbm.fit(X_train_data, y_train_data)
     output_gbm = gbm.predict(test_data)
 
-    final_output = [ x||y for x, y in zip(output_rf, output_gbm)]
+    final_output = [ x or y for x, y in zip(output_rf, output_gbm)]
 
     # Prepare submission
     predictions_file = open("output_ensemble"+".csv", "wb")
