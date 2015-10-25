@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 import csv as csv
 from sklearn.ensemble import RandomForestClassifier
 from math import *
@@ -204,7 +203,7 @@ def result_gen(i,j):
     predict(X_train_data,y_train_data,test_data,ids,times,i,j)
 
 
-result_gen(200,3)
+result_gen(190,15)
 
 # t1 = [180,360,360,500,500]
 # t2 = [15,25,30,35,45]
