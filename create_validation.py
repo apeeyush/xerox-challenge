@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import csv
 import sys
+from os import listdir
+from os.path import isfile, join
 
 def test_train_split(df):
 	id_list = df['ID'].unique()
@@ -73,23 +75,25 @@ def combine_result(f1,f2,out_name):
 def create_output_from_prob():
 	pass
 
-from os import listdir
-from os.path import isfile, join
-
-
-for f in listdir('ICU_out'):
-	if (isfile(join('ICU_out/',f)) and (f.find('output_poss_better_800_') > -1)):
- 		print f
- 		sc,sp,sens,time = compute_score('ICU_out/'+f)
- 		time  = time if time < 72.0 else time
- 		sc = sc + 0.05*(72-time)/72
- 		print('Score = %.4f, Specificity = %.4f, Sensitivity = %.4f, Prediction Time = %.4f\n'%(sc,sp,sens,time))
-
-# Run validatio for a single file
-sc,sp,sens,time = compute_score('ensemble_out/out_110_2_125_2.csv')
+# Evaluate submission
+sc,sp,sens,time = compute_score('output_rf.csv')
 time  = time if time < 72.0 else time
 sc = sc + 0.05*(72-time)/72
 print('Score = %.4f, Specificity = %.4f, Sensitivity = %.4f, Prediction Time = %.4f\n'%(sc,sp,sens,time))
+
+# Evaluate all files in a folder
+# for f in listdir('ICU_out'):
+# 	if (isfile(join('ICU_out/',f)) and (f.find('output_poss_better_800_') > -1)):
+#  		print f
+#  		sc,sp,sens,time = compute_score('ICU_out/'+f)
+#  		time  = time if time < 72.0 else time
+#  		sc = sc + 0.05*(72-time)/72
+#  		print('Score = %.4f, Specificity = %.4f, Sensitivity = %.4f, Prediction Time = %.4f\n'%(sc,sp,sens,time))
+# # Run validatio for a single file
+# sc,sp,sens,time = compute_score('ensemble_out/out_110_2_125_2.csv')
+# time  = time if time < 72.0 else time
+# sc = sc + 0.05*(72-time)/72
+# print('Score = %.4f, Specificity = %.4f, Sensitivity = %.4f, Prediction Time = %.4f\n'%(sc,sp,sens,time))
 
 #l1 = []
 #for f in listdir('.'):
@@ -113,13 +117,6 @@ print('Score = %.4f, Specificity = %.4f, Sensitivity = %.4f, Prediction Time = %
 #		print >> sys.stderr, 'Score = %.4f, Specificity = %.4f, Sensitivity = %.4f, Prediction Time = %.4f\n'%(sc,sp,sens,time)
 
 # print "out_110_2_125_2.csv"
-
-
-# # sc,sp,sens,time = compute_score('output_poss_163_3.csv')
-# # time  = time if time < 72.0 else time
-# # sc = sc + 0.05*(72-time)/72
-# # print('Score = %.4f, Specificity = %.4f, Sensitivity = %.4f, Prediction Time = %.4f\n'%(sc,sp,sens,time))
-
 
 # # sc,sp,sens,time = compute_score('output_poss_138_2.csv')
 # # time  = time if time < 72.0 else time
