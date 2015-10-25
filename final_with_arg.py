@@ -104,7 +104,7 @@ def drop_columns(df, columns):
 
 def predict(X_train_data,y_train_data,test_data,ids,times,i,j):
     # Train the model
-    rf = RandomForestClassifier(n_estimators=1000, n_jobs=-1)
+    rf = RandomForestClassifier(n_estimators=2000, n_jobs=-1)
     rf.fit(X_train_data, y_train_data)
 
     # Predict using the model
@@ -182,7 +182,7 @@ def result_gen(i,j):
 
 
 
-result_gen(275,15)
+result_gen(245,15)
 
 # t1 = [180,360,360,500,500]
 # t2 = [15,25,30,35,45]
