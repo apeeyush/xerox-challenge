@@ -5,6 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from math import *
 from datetime import datetime
 import pickle
+import sys
 
 # Prepare training dataset by merging csv files
 def gen_train_data():
