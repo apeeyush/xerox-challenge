@@ -125,7 +125,7 @@ def predict(X_train_data,y_train_data,test_data,ids,times,i,j):
     # TODO : Processing the output -> ensuring 0/1, removing negatives etc.
 
     # Prepare submission
-    predictions_file = open("ICU_out/output_final_"+str(i)+"_"+str(j)+".csv", "wb")
+    predictions_file = open("output_final_"+str(i)+"_"+str(j)+".csv", "wb")
     open_file_object = csv.writer(predictions_file)
     open_file_object.writerows(zip(ids, times, output_rf))
     predictions_file.close()
