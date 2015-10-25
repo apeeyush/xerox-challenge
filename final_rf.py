@@ -33,22 +33,21 @@ def filter_by_label(df, label_val):
 
 def modify_dead(x):
     timeDeath = x.tail(1)['TIME'].values[0]
-    index_list = []
     for i, row in x.iterrows():
         if timeDeath - row['TIME'] > 1000:
-            index_list.append(i)
-    x = x.drop(x.index[index_list])
+            x.loc[i,'LABEL'] = 2
     return x
 
 def transform_dead_labels(df):
-    df_label1 = filter_by_label(df,1)
-    df_label1.groupby('ID').apply(modify_dead)        
-    return df_label1
+    df_label_1 = filter_by_label(df,1)
+    df_label_1.groupby('ID').apply(modify_dead)
+    df_label_1 = filter_by_label(df_label_1,1)
+    return df_label_1
 
 # Filter data to keep only latest timestamp where label=1
 def filter_dataset(df,i,j):
-    df_label1 = transform_dead_labels(df)
-    label_1 = df_label1.groupby('ID').tail(j).reset_index()
+    df_label_1 = transform_dead_labels(df)
+    label_1 = df_label_1.groupby('ID').tail(j).reset_index()
     label_0 = filter_by_label(df, 0).groupby('ID').tail(i).reset_index()
     final_df = label_1
     final_df = final_df.append(label_0, ignore_index=True)
